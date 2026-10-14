@@ -4,6 +4,24 @@ All notable changes to the quicksand project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [quicksand-core v0.14.0, quick-sandbox v0.13.0] - 2026-10-14
+
+Bidirectional port forwarding. Guests can now reach services on the host, and the forwarding API describes both directions with one type.
+
+### Added
+- **quicksand-core / quick-sandbox:** `Forward(Host(...), Guest(...))` replaces the single-direction `PortForward`. A `Forward` whose source is a `Host` publishes a guest port on the host, as before. A `Forward` whose source is a `Guest` publishes a host port inside the guest at a guest-facing address (default `10.0.2.101`), so sandboxed code can reach a proxy, database, or API server running on the host. Guest-to-host forwards use QEMU's `guestfwd` with a per-connection relay process, so concurrent connections do not interleave. `SandboxConfig.port_forwards` stays a single list, with `host_forwards` and `guest_forwards` views. (#55)
+- **quicksand-core / quick-sandbox:** `Host` and `Guest` endpoints accept a port alone, an address and port, or an `"address:port"` string. Host-side addresses let a forward bind to an interface other than loopback. Configuration validation rejects duplicate host binds, duplicate guest sources, guest-to-host forwards with networking disabled, and collisions with the built-in SMB tunnel address.
+- **quick-sandbox CLI:** `quicksand run` gains `-g [GUEST_ADDR:]GUEST_PORT:[HOST_ADDR:]HOST_PORT` for guest-to-host forwards, and `-p` accepts optional host and guest addresses.
+
+### Deprecated
+- **quicksand-core / quick-sandbox:** `PortForward(host, guest)` still works but now returns a `Forward` and emits a `DeprecationWarning`. Use `Forward(Host(port), Guest(port))` instead.
+
+### Fixed
+- **quicksand-core:** `kernel-irqchip=off` is passed to WHPX only on x86_64 hosts. ARM64 Windows hosts keep a bare `whpx` accelerator argument. (#34)
+
+### Released (dependency updates)
+- quicksand-agent v0.4.11, quicksand-alpine v0.10.1, quicksand-alpine-desktop v0.9.11, quicksand-base-scaffold v0.3.12, quicksand-cua v0.3.13, quicksand-image-tools v0.6.1, quicksand-overlay-scaffold v0.3.12, quicksand-ubuntu v0.10.1, and quicksand-ubuntu-desktop v0.9.11. Dependency repins for quicksand-core 0.14. No other changes.
+
 ## [quicksand-core v0.13.0, quick-sandbox v0.12.0, quicksand-image-tools v0.6.0] - 2026-09-14
 
 Streaming command input, guest OS accounts, and more reliable mounted-file workflows.
