@@ -13,11 +13,9 @@ Quicksand is an async Python API to launch, control, and snapshot [QEMU](https:/
 
 - **quick-sandbox v0.13.0 / quicksand-core v0.14.0** (2026-10-14)
   - 🔁 **Bidirectional port forwarding:** `Forward(Host(...), Guest(...))` lets guests reach services on the host, such as proxies, databases, and APIs.
-  - 🪟 **Fix:** WHPX on ARM64 Windows hosts no longer gets the x86-only `kernel-irqchip=off` option.
 - **quick-sandbox v0.12.0 / quicksand-core v0.13.0** (2026-09-14)
   - 👥 **Guest OS users:** `create_user()` and `execute(user=...)` run commands as separate accounts with their own home directories.
   - 📥 **Streaming stdin:** `execute(stdin=...)` streams input to commands while output streams back.
-  - 🔒 **Fix:** `flock` and SQLite commits work on bundled SMB mounts.
 
 See the [changelog](CHANGELOG.md) for details.
 
