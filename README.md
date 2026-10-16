@@ -9,6 +9,15 @@
 
 Quicksand is an async Python API to launch, control, and snapshot [QEMU](https://www.qemu.org) virtual machines with a particular focus on sandboxing AI agents. Quicksand provides pre-built Linux VMs for Ubuntu and Alpine distros and supports x86_64 and ARM64 across macOS, Linux, and Windows. Running sandboxes needs no root privileges or Docker; install the QEMU and image extras for a bundled runtime on supported platforms.
 
+### 🚀 Latest release: quick-sandbox v0.13.0 (2026-10-14)
+
+- 🔁 **Bidirectional port forwarding:** `Forward(Host(...), Guest(...))` lets guests reach services on the host, such as proxies, databases, and APIs.
+- 🖥️ **CLI:** `quicksand run -g` adds guest-to-host forwards, and `-p` accepts optional host and guest addresses.
+- ⚠️ **Deprecated:** `PortForward` still works but now warns. Use `Forward` instead.
+- 🪟 **Fix:** WHPX on ARM64 Windows hosts no longer gets the x86-only `kernel-irqchip=off` option.
+
+See the [changelog](CHANGELOG.md) for details.
+
 ## Installation
 
 ```bash
