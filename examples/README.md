@@ -39,6 +39,7 @@ quicksand install ubuntu-desktop
 | `accelerator_config.py` | Hardware acceleration options | ubuntu |
 | `mounts.py` | Boot-time and hot mounts | ubuntu |
 | `checkpoint_revert.py` | In-session snapshots with revert | ubuntu |
+| [`lifeos_security_pilot/`](lifeos_security_pilot/README.md) | Offline security doctor and ephemeral checkpoint smoke test | ubuntu (default) or alpine |
 | `save.py` | Save and reload sandbox state | ubuntu |
 | `save_load_large.py` | Save/load stress test with large packages | ubuntu or alpine |
 | `error_handling.py` | Exit codes, stderr, timeouts | ubuntu |

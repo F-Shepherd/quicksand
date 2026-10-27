@@ -89,14 +89,18 @@ class VMProcessManager:
         # CREATE_NO_WINDOW: when frozen, sys.executable is a Windows console app;
         # without this it (and the QEMU it launches) flashes a console window.
         _no_window = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
-        self._process = subprocess.Popen(
-            wrapped,
-            stdout=self._console_file,
-            stderr=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            env=env,
-            creationflags=_no_window,
-        )
+        try:
+            self._process = subprocess.Popen(
+                wrapped,
+                stdout=self._console_file,
+                stderr=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                env=env,
+                creationflags=_no_window,
+            )
+        except BaseException:
+            self.terminate()
+            raise
 
         logger.debug(f"Started QEMU via reaper, reaper PID {self._process.pid}")
 
@@ -200,7 +204,17 @@ class VMProcessManager:
                 if self._process.poll() is None:
                     with contextlib.suppress(Exception):
                         self._process.kill()
+                        self._process.wait(timeout=graceful_timeout)
             finally:
+                # Popen does not close PIPE handles when the process exits.
+                for name in ("stdin", "stderr"):
+                    stream = getattr(self._process, name)
+                    if stream is not None:
+                        try:
+                            stream.close()
+                        except Exception as e:
+                            errors.append((f"process {name}", e))
+                            logger.warning("Failed to close process %s: %s", name, e)
                 self._process = None
 
         return errors
